@@ -1,0 +1,47 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t flask-task-manager .
+
+      - name: Run Docker Container
+        run: docker run -d -p 5000:5000 --name flask-container flask-task-manager
+
+      - name: List Running Containers
+        run: docker ps
+
+      - name: Output Application Logs
+        run: docker logs flask-container
+
+      - name: Wait for Application to Start
+        run: |
+          for i in {1..10}; do
+            curl --fail http://localhost:5000 && break || sleep 5
+          done
+
+      - name: Check Application Version
+        run: |
+          APP_VERSION=$(curl -s http://localhost:5000/version)
+          FILE_VERSION=$(cat version.txt)
+          if [ "$APP_VERSION" != "$FILE_VERSION" ]; then
+            echo "Version mismatch: Application version ($APP_VERSION) does not match version.txt ($FILE_VERSION)."
+            exit 1
+          fi
+          echo "Version matches: $APP_VERSION"
+
+      - name: Clean Up
+        run: |
+          docker stop flask-container
+          docker rm flask-container
