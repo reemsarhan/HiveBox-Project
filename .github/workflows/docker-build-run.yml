@@ -1,23 +1,17 @@
-name: Docker Build and Run
+name: Docker Build and Test
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-run:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
 
       - name: Build Docker Image
         run: docker build -t flask-task-manager .
@@ -25,16 +19,22 @@ jobs:
       - name: Run Docker Container
         run: docker run -d -p 5000:5000 --name flask-container flask-task-manager
 
-      - name: Wait for Application to Start
-        run: sleep 10
+      - name: List Running Containers
+        run: docker ps
 
       - name: Output Application Logs
         run: docker logs flask-container
 
+      - name: Wait for Application to Start
+        run: |
+          for i in {1..10}; do
+            curl --fail http://localhost:5000 && break || sleep 5
+          done
+
       - name: Test Application
         run: curl --fail http://localhost:5000 || exit 1
 
-      - name: Clean up Docker Container
+      - name: Clean Up
         run: |
           docker stop flask-container
           docker rm flask-container
