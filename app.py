@@ -5,9 +5,6 @@ import click  # Flask uses Click for command-line utilities
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Define the app version
-APP_VERSION = "1.0.0"
-
 # Helper functions for reading and writing JSON files
 def read_tasks():
     with open('tasks.json', 'r') as file:
@@ -21,11 +18,23 @@ def read_users():
     with open('users.json', 'r') as file:
         return json.load(file)
 
+# Function to read version from a file
+def read_version_from_file():
+    try:
+        with open('version.txt', 'r') as file:
+            version = file.read().strip()
+            return version
+    except FileNotFoundError:
+        return "Version file not found."
+    except Exception as e:
+        return f"Error reading version file: {e}"
+
 # CLI command to print the app version
 @app.cli.command("version")
 def print_version():
     """Print the current application version and exit."""
-    click.echo(f"Current Task Manager version: {APP_VERSION}")
+    version = read_version_from_file()
+    click.echo(f"Current Task Manager version: {version}")
 
 # Home route
 @app.route('/')
@@ -105,6 +114,13 @@ def delete_task(task_id):
     
     write_tasks(tasks)
     return redirect(url_for('index'))
+
+# Show version route
+@app.route('/version', methods=['GET'])
+def show_version():
+    """Display the current application version from the version.txt file."""
+    version = read_version_from_file()
+    return f"Current Task Manager version: {version}"
 
 if __name__ == '__main__':
     app.run(debug=True)
