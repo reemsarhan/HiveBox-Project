@@ -1,0 +1,78 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+    inputs:
+      increment:
+        description: "Type of version bump (major, minor, patch)"
+        required: true
+        default: "patch"  # Default is a patch increment
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Read and increment the version
+      - name: Increment Version
+        id: version
+        run: |
+          # Read the current version
+          current_version=$(cat version.txt)
+          echo "Current version: $current_version"
+
+          # Extract major, minor, and patch
+          IFS='.' read -r major minor patch <<< "$current_version"
+
+          # Determine the increment type
+          case "${{ github.event.inputs.increment }}" in
+            "major")
+              major=$((major + 1))
+              minor=0
+              patch=0
+              ;;
+            "minor")
+              minor=$((minor + 1))
+              patch=0
+              ;;
+            "patch")
+              patch=$((patch + 1))
+              ;;
+          esac
+
+          # Construct the new version
+          new_version="${major}.${minor}.${patch}"
+          echo "New version: $new_version"
+
+          # Save it to version.txt
+          echo "$new_version" > version.txt
+
+          # Set output for subsequent steps
+          echo "::set-output name=new_version::$new_version"
+
+      # Step 3: Commit and push the changes
+      - name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add version.txt
+          git commit -m "Bump version to ${{ steps.version.outputs.new_version }}"
+          git push origin main
+
+      # Step 4: Tag the new version
+      - name: Create Git Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag v${{ steps.version.outputs.new_version }}
+          git push origin v${{ steps.version.outputs.new_version }}
