@@ -13,34 +13,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Docker
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      # Step 3: Log in to DockerHub (Optional if pushing images)
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Step 4: Build the Docker image
       - name: Build Docker Image
         run: docker build -t flask-task-manager .
 
-      # Step 5: Run the Docker container
       - name: Run Docker Container
         run: docker run -d -p 5000:5000 --name flask-container flask-task-manager
 
-      # Step 6: Test the application
+      - name: Wait for Application to Start
+        run: sleep 10
+
+      - name: Output Application Logs
+        run: docker logs flask-container
+
       - name: Test Application
         run: curl --fail http://localhost:5000 || exit 1
 
-      # Step 7: Clean up (stop and remove the container)
       - name: Clean up Docker Container
         run: |
           docker stop flask-container
