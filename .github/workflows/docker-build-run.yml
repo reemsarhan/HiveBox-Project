@@ -34,7 +34,7 @@ jobs:
       - name: Test Application
         run: curl --fail http://localhost:5000 || exit 1
 
-      # - name: Clean Up
-      #   run: |
-      #     docker stop flask-container
-      #     docker rm flask-container
+      - name: Clean Up
+        run: |
+          docker stop flask-container
+          docker rm flask-container
