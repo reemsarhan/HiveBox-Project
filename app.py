@@ -120,7 +120,10 @@ def delete_task(task_id):
 def show_version():
     """Display the current application version from the version.txt file."""
     version = read_version_from_file()
-    return f"{version}"
+    if "Version file not found" in version or "Error" in version:
+        return version, 500  # Return error if version.txt is not found or has issues
+    return version, 200  # Return only the version string
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
