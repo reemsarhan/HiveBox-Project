@@ -31,15 +31,15 @@ jobs:
             curl --fail http://localhost:5000 && break || sleep 5
           done
 
-      - name: Check Application Version
+      - name: Test Application Version
         run: |
           APP_VERSION=$(curl -s http://localhost:5000/version)
           FILE_VERSION=$(cat version.txt)
           if [ "$APP_VERSION" != "$FILE_VERSION" ]; then
-            echo "Version mismatch: Application version ($APP_VERSION) does not match version.txt ($FILE_VERSION)."
+            echo "Version mismatch: Application version ($APP_VERSION) does not match version.txt ($FILE_VERSION)"
             exit 1
           fi
-          echo "Version matches: $APP_VERSION"
+          echo "Version check passed. Application version matches version.txt."
 
       - name: Clean Up
         run: |
