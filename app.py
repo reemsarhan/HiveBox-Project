@@ -120,7 +120,7 @@ def delete_task(task_id):
 def show_version():
     """Display the current application version from the version.txt file."""
     version = read_version_from_file()
-    return f"Current Task Manager version: {version}"
+    return f"{version}"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
