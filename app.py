@@ -123,4 +123,5 @@ def show_version():
     return f"Current Task Manager version: {version}"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
+
