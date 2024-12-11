@@ -98,7 +98,7 @@ The application version is displayed dynamically from version.txt.
 Access the version at http://localhost:5000/version.
 
 ### Continuous Integration
----
+
 The project includes a GitHub Actions workflow:
 
 Builds the Docker image.
@@ -108,5 +108,5 @@ Runs the container.
 Validates the application version against version.txt.
 
 Runs tests to ensure functionality.
----
+
  
