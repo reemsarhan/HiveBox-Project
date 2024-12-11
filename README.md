@@ -110,5 +110,3 @@ Validates the application version against version.txt.
 Runs tests to ensure functionality.
 ---
  
-=
-
