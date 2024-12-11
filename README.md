@@ -1,24 +1,24 @@
 # TaskManagerWithCI
 
-### Flask Task Manager
+## Flask Task Manager
 
 A simple task management web application built using Python's Flask framework. The application includes user authentication, task management functionality, and version tracking.
 
-##Features
+## Features
 
-User authentication system (login and logout).
+- User authentication system (login and logout).
 
-Add, edit, and delete tasks.
+- Add, edit, and delete tasks.
 
-View tasks with their current status.
+- View tasks with their current status.
 
-Persistent storage using JSON files (tasks.json and users.json).
+- Persistent storage using JSON files (tasks.json and users.json).
 
-Application versioning displayed dynamically from version.txt.
+- Application versioning displayed dynamically from version.txt.
 
-Dockerized application for easy deployment.
+- Dockerized application for easy deployment.
 
-GitHub Actions workflow for CI/CD.
+- GitHub Actions workflow for CI/CD.
 
 ## Prerequisites
 
@@ -31,9 +31,9 @@ Docker
 Git
 ```
 
-Getting Started
+## Getting Started
 
-Install Dependencies
+#### Install Dependencies
 
 Create a virtual environment and install dependencies:
 ```
@@ -48,7 +48,7 @@ Start the Flask development server:
 python app.py
 ```
 
-Access the application at http://localhost:5000.
+### Access the application at http://localhost:5000.
 
 Run with Docker
 
@@ -79,19 +79,19 @@ Usage
 
 User Authentication
 
-Navigate to /login to log in with credentials stored in users.json.
+--> Navigate to /login to log in with credentials stored in users.json.
 
-Log out by clicking the logout button.
+--> Log out by clicking the logout button.
 
-Manage Tasks
+--> Manage Tasks
 
-Add a task by filling out the form on the home page.
+--> Add a task by filling out the form on the home page.
 
-Edit a task's status by marking it as completed or pending.
+--> Edit a task's status by marking it as completed or pending.
 
-Delete a task by clicking the delete button.
+--> Delete a task by clicking the delete button.
 
-Version Tracking
+--> Version Tracking
 
 The application version is displayed dynamically from version.txt.
 
@@ -101,12 +101,12 @@ Access the version at http://localhost:5000/version.
 
 The project includes a GitHub Actions workflow:
 
-Builds the Docker image.
+1)Builds the Docker image.
 
-Runs the container.
+2)Runs the container.
 
-Validates the application version against version.txt.
+3)Validates the application version against version.txt.
 
-Runs tests to ensure functionality.
+4)Runs tests to ensure functionality.
 
  
